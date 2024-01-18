@@ -1,62 +1,61 @@
-from PyQt5.QtWidgets import QMainWindow
-# , QApplication, QWidget, QVBoxLayout, QGridLayout, QLabel, QPushButton, QTextEdit
+import tkinter as tk
+from server import Server
 # import sys
 
 
-class Window(QMainWindow):
+class Window(tk.Tk):
     def __init__(self):
         super().__init__()
 
-        # self.setGeometry(300, 300, 600, 400)
-        # self.setWindowTitle("Server Info")
+        self.frameConsole = tk.Frame(self, padx=10, pady=10)
+        self.frameButtons = tk.Frame(self, padx=10, pady=10)
+        self.console = tk.Text(self, padx=10, pady=10)
+        self.frameConsole.grid(column=0, row=0)
+        self.frameButtons.grid(column=1, row=0)
+        self.console.grid(column=0, columnspan=2, row=1)
 
-        # Central widget to hold the main layout
-        # central_widget = QWidget(self)
-        # self.setCentralWidget(central_widget)
+        self.info = {
+            "name": {
+                "label": tk.Label(self.frameConsole, text="Server name:", anchor="e", justify="right"),
+                "display": tk.Label(self.frameConsole, text="None", anchor="w", justify="left")
+            },
+            "ip": {
+                "label": tk.Label(self.frameConsole, text="IP address:", anchor="e", justify="right"),
+                "display": tk.Label(self.frameConsole, text="None", anchor="w", justify="left")
+            },
+            "access": {
+                "label": tk.Label(self.frameConsole, text="Accessibility:", anchor="e", justify="right"),
+                "display": tk.Label(self.frameConsole, text="inactive", anchor="w", justify="left")
+            },
+            "status": {
+                "label": tk.Label(self.frameConsole, text="Status:", anchor="e", justify="right"),
+                "display": tk.Label(self.frameConsole, text="Stopped", anchor="w", justify="left")
+            },
+            "user_count": {
+                "label": tk.Label(self.frameConsole, text="Users:", anchor="e", justify="right"),
+                "display": tk.Label(self.frameConsole, text="0", anchor="w", justify="left")
+            },
+        }
 
-        # Main layout with two frames: server info and action buttons
-        # main_layout = QVBoxLayout(central_widget)
+        self.buttons = {
+            "setup": tk.Button(self.frameButtons, text="Setup", width=20),
+            "start": tk.Button(self.frameButtons, text="Start", width=20),
+            "stop": tk.Button(self.frameButtons, text="Stop", width=20),
+            "restart": tk.Button(self.frameButtons, text="Restart", width=20),
+        }
 
-        # Frame 1: Server Info
-        # frame_info = QWidget(self)
-        # frame_info_layout = QGridLayout(frame_info)
+        keysInfo = list(self.info.keys())
+        for x in keysInfo:
+            pos = keysInfo.index(x)
+            self.info[x]["label"].grid(sticky="e", column=0, row=pos)
+            self.info[x]["display"].grid(sticky="w", column=1, row=pos)
 
-        # Server Info Labels and Values (Example data, replace with actual server info)
-        # server_info_data = {
-        #     "Server Name": "My Server",
-        #     "IP Address": "192.168.1.1",
-        #     "Port": "8080",
-        #     "Status": "Running"
-        # }
+        self.buttons["setup"].grid(column=0, row=0, sticky="se")
+        self.buttons["start"].grid(column=1, row=0, sticky="sw")
+        self.buttons["stop"].grid(column=0, row=1, sticky="ne")
+        self.buttons["restart"].grid(column=1, row=1, sticky="nw")
 
-        # row_num = 0
-        # for label, value in server_info_data.items():
-        #     frame_info_layout.addWidget(QLabel(label), row_num, 0, alignment=0)
-        #     frame_info_layout.addWidget(QLabel(value), row_num, 1, alignment=0)
-        #     row_num += 1
+        self.mainloop()
 
-        # Console Output (Example, replace with your console implementation)
-        # console_output = QTextEdit(self)
-        # frame_info_layout.addWidget(console_output, row_num, 0, 1, 2)
-        #
-        # main_layout.addWidget(frame_info)
-        #
-        # Frame 2: Action Buttons
-        # frame_actions = QWidget(self)
-        # frame_actions_layout = QVBoxLayout(frame_actions)
-        #
-        # btn_start = QPushButton("Start", self)
-        # btn_start.clicked.connect(self.start_server)
-        # frame_actions_layout.addWidget(btn_start)
-        #
-        # btn_stop = QPushButton("Stop", self)
-        # btn_stop.clicked.connect(self.stop_server)
-        # frame_actions_layout.addWidget(btn_stop)
-
-        # btn_restart = QPushButton("Restart", self)
-        # btn_restart.clicked.connect(self.restart_server)
-        # frame_actions_layout.addWidget(btn_restart)
-
-        # main_layout.addWidget(frame_actions)
-
-        self.show()
+    def write_console(self, message):
+        self.console.insert("end", message)
